@@ -26,20 +26,27 @@
                 <div data-role="fieldcontain">
                   <label for="restaurant">Restaurant:</label>
                      <input id="addRestField" name="restaurant" type="text" />
-              </div>
-              <div data-role="fieldcontain">
+              	</div>
+              	
+              	<div data-role="fieldcontain">
                   <label for="title">Title:</label>
                      <input id="addTitleField" name="title" type="text" />
-              </div>
-              <div data-role="fieldcontain">
+              	</div>
+              	
+              	<div data-role="fieldcontain">
                   <label for="description">Description:</label>
                   <textarea id="addDescriptionField" name="description" cols="40" rows="8"></textarea>
-              </div>
-              <div id="categories">
-  	Entry 1<br><input type="text" name="categoryList[]">
-                 <input type="button" value="Add Category" onClick="addInput('categories');">
-                 <input type="button" value="Remove Category" onClick="this.parentNode.parentNode.removeChild(this.parentNode);" />
-</div>
+              	</div>
+              
+              <div data-role="fieldcontain">
+                 <label for="categories">Categories:</label>
+  				  	 <!--<input id="addCategory" name="categories" type="text" />
+                 <input type="button" value="Remove Category" onClick="categoryRemove("");" />/-->
+			     <div id="categories">
+			     <input type="button" value="Add Category" onClick="addInput('categories');" />
+			     </div> 
+			  </div>
+			  
               <div class="ui-body ui-body-b">
                   <fieldset class="ui-grid-a">
                       <div class="ui-block-a">
@@ -70,16 +77,27 @@
   <script type="text/javascript" charset="utf-8">
 
       $db = $.couch.db("winehero");
-	
+	  var categoryCount = 0;
 	  function addInput(divName){
-		
 		var newdiv = document.createElement('div');
-	    newdiv.innerHTML = "<br><input type='text' name='categoryList[]'>" +
-	                 "<input type=\"button\" value=\"Add Category\" onClick=\"addInput('categories')\";\/>" +
-	                 "<input type=\"button\" value=\"Remove Category\" onClick=\"this.parentNode.parentNode.removeChild(this.parentNode);\" \/>";
+		newdiv.setAttribute("id","categoryDivHolder"+categoryCount);
+	    newdiv.innerHTML = "<input id=\"addCategory"+categoryCount+"\" name=\"categoryField\" type=\"text\" \/>" +
+                 "<input type=\"button\" value=\"Remove Category\" onClick=\"categoryRemove("+categoryCount+");\" \/>" +
+			     "";
+			     //<input type=\"button\" value=\"Add Category\" onClick=\"addInput('categories');\" \/>
 	    document.getElementById(divName).appendChild(newdiv);
+	    categoryCount++;
+	    //console.log("addInputFired");
 	  }
-	
+	  function categoryRemove(removeCat)
+	  {
+	  	//console.log(document.getElementById('categoryDivHolder'+removeCat));
+	  	//.removeChild('addCategory'+removeCat);
+	  	element = document.getElementById("categoryDivHolder"+removeCat);
+		element.parentNode.removeChild(element);
+	  	return false;
+	  	categoryCount--;	
+	  }
       function handleDocumentReady()
       {
           // request winelist documents...
@@ -93,8 +111,24 @@
           			document.title = $("input#addTitleField").val();
           			document.description = $("textarea#addDescriptionField").val();
           			// document.categories = ["test", "test2", "test3"];
-          			document.categories = $("input#categoryList[]").val();
+          			//document.categories = $('*["input#categoryList"]').val();
           			//$("input#categories").appendTo(document.categories);
+          			var categoriesHolder = new Array();
+          			for(cat=0;cat<categoryCount;cat++)
+          			{
+          				if ($("input#addCategory"+cat).val())
+          				{
+          					categoriesHolder[cat] = $("input#addCategory"+cat).val();
+          				}
+          			}
+          			document.categories = categoriesHolder;
+          			//document.categories = $("input#categories[]").val();
+          			//$.each($("input#addCategory"), function(index, value) {
+    				//	$(this).val();
+					//});
+          			//var catArray = 
+          			//console.log(categoriesHolder);
+          			//return false;
           			document.creation_date = ( new Date() ).getTime();
           			document.kind = "winelist";
           			$db.saveDoc( document, {
@@ -149,15 +183,15 @@
                                   		"<\/li>";
                           $("#winelists").append( listItem );
                       }
-                      $.get('/callback', {cache: false});
+                      //$.get('/callback', {cache: false});
                       $("#winelists").listview( "refresh" );
                       //$("[data-position='fixed']").fixedtoolbar('show');
                   }
                   });
       }
 
-	
-	
+
+
       $(document).ready( handleDocumentReady );
       
       

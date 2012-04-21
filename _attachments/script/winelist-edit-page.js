@@ -4,24 +4,22 @@ var WineListEditPageController = function() {
 
     function handleEditPageViewHide()
     {
-        $("#cancelButton").die("click", handleCancelEdit);
-        $("#cancelBackButton").die( "click" );
-        $("#submitButton").die( "click" );
+        
         editableWineList = null;
         
-        var docId = $("#wlistform").data("identity");
-        var pageCache =  $(document.getElementById("_show/winelistedit/" + docId));
-        pageCache.unbind( "pagehide" );
-        pageCache.empty();
-        pageCache.remove();
+        //var docId = $("#wlistform").data("identity");
+        //var pageCache =  $(document.getElementById("_show/winelistedit/" + docId));
+       // pageCache.unbind( "pagehide" );
+       // pageCache.empty();
+       // pageCache.remove();
     }
 
     function handleEditView()
     {
         // Watch for bound hide of page to clear from cache.
-        var docId = $("#wlistform").data("identity");
-        var wineListPage = $(document.getElementById("_show/winelistedit/" + docId));
-        wineListPage.bind( "pagehide", handleEditPageViewHide );
+        //var docId = $("#wlistform").data("identity");
+        //var wineListPage = $(document.getElementById("_show/winelistedit/" + docId));
+        //wineListPage.bind( "pagehide", handleEditPageViewHide );
         
         storeUnitedDocument();
     }
@@ -51,7 +49,9 @@ var WineListEditPageController = function() {
    			error: function() {
    				alert("Cannot save document: " + document._id );
    			}
+   			
    		});
+   		$("#submitButton").die( "click" );
     }
     
     function updateEditableWineList( document )
@@ -75,7 +75,19 @@ var WineListEditPageController = function() {
 		revertEdits();
 		var docId = $("#wlistform").data("identity");
 		navigateToWineListPage( docId );
+		$("#cancelButton").die("click", handleCancelEdit);
+        $("#cancelBackButton").die( "click");
+        $("#submitButton").die( "click" );
+		
 	}
+	
+	function addInput(divName){
+		
+		var newdiv = document.createElement('div');
+	    newdiv.innerHTML = "<br><input type='text' name='categoryList[]'>" +
+	                 "<input type=\"button\" value=\"Remove Category\" onClick=\"this.parentNode.parentNode.removeChild(this.parentNode);\" \/>";
+	    document.getElementById(divName).appendChild(newdiv);
+	  }
 	
     return {
         initialize: function() {
@@ -92,7 +104,7 @@ var WineListEditPageController = function() {
         				document.restaurant = $("input#restaurantField").val();
                         document.title = $("input#titleField").val();
                         document.description = $("textarea#descriptionField").val();
-                        //document.categories = $("textarea#categoriesField").val();
+                        document.categories = $("input#categoryList[]").val();
                         saveDocument( document );
         			},
         			error: function() {
@@ -101,8 +113,9 @@ var WineListEditPageController = function() {
         		});
         	});
             $("div[data-role='page']").live( "pageshow", function() {
-                $("div[data-role='page']").die( "pageshow" );
-                handleEditView();
+              $("div[data-role='page']").die( "pageshow" );
+               handleEditView();
+                
             });
         }
     };

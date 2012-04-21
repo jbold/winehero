@@ -1,4 +1,4 @@
-<div data-role="page" id="winelistedit" data-nobackbtn="true">
+<div data-role="page" id="winelistedit" data-nobackbtn="true" data-dom-cache="false">
     <div data-role="header" id="wlistheader">
         <a id="cancelBackButton" href="#" data-icon="delete">Close</a>
         <h1 class="wListTitle">{{title}}</h1>
@@ -19,7 +19,13 @@
             </div>
             <div data-role="fieldcontain">
                 <label for="categories">Categories:</label>
-                {{#categories}}<input id="categoriesField" name="categories" type="text" value="{{.}}" />{{/categories}}
+                {{#categories}}
+                	<input id="categoryList[]" name="categoryList[]" type="text" value="{{.}}" />
+                	<input type="button" value="Remove Category" onClick="this.parentNode.parentNode.removeChild(this.parentNode);" />
+                {{/categories}}
+            </div>
+            <div data-role="addCat">
+                <input type="button" value="Add Category" onClick="addInput('categories');">
             </div>
             <div class="ui-body ui-body-b">
                 <fieldset class="ui-grid-a">
