@@ -35,6 +35,11 @@
                   <label for="description">Description:</label>
                   <textarea id="addDescriptionField" name="description" cols="40" rows="8"></textarea>
               </div>
+              <div id="categories">
+  	Entry 1<br><input type="text" name="categoryList[]">
+                 <input type="button" value="Add Category" onClick="addInput('categories');">
+                 <input type="button" value="Remove Category" onClick="this.parentNode.parentNode.removeChild(this.parentNode);" />
+</div>
               <div class="ui-body ui-body-b">
                   <fieldset class="ui-grid-a">
                       <div class="ui-block-a">
@@ -65,20 +70,33 @@
   <script type="text/javascript" charset="utf-8">
 
       $db = $.couch.db("winehero");
-
+	
+	  function addInput(divName){
+		
+		var newdiv = document.createElement('div');
+	    newdiv.innerHTML = "<br><input type='text' name='categoryList[]'>" +
+	                 "<input type=\"button\" value=\"Add Category\" onClick=\"addInput('categories')\";\/>" +
+	                 "<input type=\"button\" value=\"Remove Category\" onClick=\"this.parentNode.parentNode.removeChild(this.parentNode);\" \/>";
+	    document.getElementById(divName).appendChild(newdiv);
+	  }
+	
       function handleDocumentReady()
       {
           // request winelist documents...
           $("#home").bind( "pagebeforeshow", refreshWineLists );
           refreshWineLists();
           
-          $("addSubmitButton").live( "click", function( event ) {
+          $("#addSubmitButton").live( "click", function( event ) {
           	event.preventDefault();
           		var document = {};
           			document.restaurant = $("input#addRestField").val();
           			document.title = $("input#addTitleField").val();
           			document.description = $("textarea#addDescriptionField").val();
+          			// document.categories = ["test", "test2", "test3"];
+          			document.categories = $("input#categoryList[]").val();
+          			//$("input#categories").appendTo(document.categories);
           			document.creation_date = ( new Date() ).getTime();
+          			document.kind = "winelist";
           			$db.saveDoc( document, {
           				success: function() {
           					$.mobile.changePage( "#home", "slidedown", true, true);
@@ -131,13 +149,19 @@
                                   		"<\/li>";
                           $("#winelists").append( listItem );
                       }
+                      $.get('/callback', {cache: false});
                       $("#winelists").listview( "refresh" );
-                      $("[data-position='fixed']").fixedtoolbar('show');
+                      //$("[data-position='fixed']").fixedtoolbar('show');
                   }
                   });
       }
-      
+
+	
+	
       $(document).ready( handleDocumentReady );
+      
+      
+
 
   </script>
 
