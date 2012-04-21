@@ -132,8 +132,8 @@
           			document.creation_date = ( new Date() ).getTime();
           			document.kind = "winelist";
           			$db.saveDoc( document, {
-          				success: function() {
-          					$.mobile.changePage( "#home", "slidedown", true, true);
+          				success: function(data) {
+          					$.mobile.changePage( "_show/winelist/" + data.id, "slidedown", true, true);
           				},
           				error: function( status, error, reason ) {
           					alert( "Cannot save new document.\n" + status + "," + reason + ", " + error );
