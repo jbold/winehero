@@ -1,0 +1,22 @@
+<div data-role="page" id="winelist" data-position="inline" data-back="true">
+    <div data-role="header" id="wlistheader">
+        <h1 class="wListTitle">{{title}}</h1>
+        <a href="#home" data-icon="grid" class="ui-btn-right">Home</a>
+    </div>
+    <div data-role="content" id="wlistcontent" data-identity="{{document}}">
+        <h2 class="restaurant">{{restaurant}}</h2>
+        <p class="description">{{description}}</p>
+        <ul data-role="listview" data-divider-theme="a" data-inset="true">
+        	{{#categories}}
+        		<li data-theme="c">
+            		<a href="#" data-transition="slide">
+                		{{.}}
+                	</a>
+            	</li>
+            {{/categories}}
+        </ul>
+        <p id="editbutton" data-role="button" data-theme="a">Edit</p>          
+    </div>
+    <div data-role="footer" />
+</div>
+{{>scripts}}

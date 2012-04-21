@@ -1,66 +1,144 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Example CouchApp</title>
+    <title>Wine Hero</title>
     <link rel="stylesheet" href="style/main.css" type="text/css">
+    <link rel="stylesheet" href="style/jquery.mobile-1.0.1.css" type="text/css">
   </head>
   <body>
-    <div id="account"></div>
-
-    <h1>Example CouchApp</h1>
-
-    <div id="profile">
-    </div>
-    <div id="content"></div>
-
-    <div id="sidebar">
-      <p>Edit welcome message.</p>
-      <p>Ideas: You could easily turn this into a photo sharing app, 
-          or a grocery list, or a chat room. <a href="https://github.com/couchapp/example">Code for this app is on Github.</a></p>
+  <div id="home" data-role="page">
+      <div data-role="header" data-position="fixed"><h2>Wine Hero</h2></div>
+      <div data-role="content">
+          <ul id="winelists" data-role="listview" data-theme="c" data-dividertheme="b" />
+      </div>
+      <div data-role="footer" data-position="fixed">
+      	<div data-role="navbar">
+      		<ul class="ui-grid-a">
+      			<li style="width:100%;"><a href="#addWineList" data-transition="slideup" data-icon="plus">Add WList</a></li>
+      		</ul>
+      	</div>
+      </div>
+  </div>
+  <div id="addWineList" data-role="page">
+        <div data-role="header"><h1>New WList</h1></div>
+        <div data-role="content">
+            <form id="wineListAddForm" action="#" method="get">
+                <div data-role="fieldcontain">
+                  <label for="restaurant">Restaurant:</label>
+                     <input id="addRestField" name="restaurant" type="text" />
+              </div>
+              <div data-role="fieldcontain">
+                  <label for="title">Title:</label>
+                     <input id="addTitleField" name="title" type="text" />
+              </div>
+              <div data-role="fieldcontain">
+                  <label for="description">Description:</label>
+                  <textarea id="addDescriptionField" name="description" cols="40" rows="8"></textarea>
+              </div>
+              <div class="ui-body ui-body-b">
+                  <fieldset class="ui-grid-a">
+                      <div class="ui-block-a">
+                          <a href="#home" id="addCancelButton" data-role="button" data-theme="d">Cancel</a>
+                      </div>
+                      <div class="ui-block-b">
+                          <a href="#" id="addSubmitButton" data-role="button" data-theme="a">Submit</a>
+                      </div>
+                  </fieldset>
+              </div>
+          </form>
+        </div>
     </div>
   </body>
+  <!--
+  <script src="vendor/couchapp/loader.js"></script>
+-->
   <script src="/_utils/script/sha1.js"></script>
   <script src="/_utils/script/json2.js"></script>
   <script src="/_utils/script/jquery.js"></script>
+  <script src="vendor/couchapp/jquery-1.6.4.js"></script>
   <script src="/_utils/script/jquery.couch.js"></script>
   <script src="vendor/couchapp/jquery.couchLogin.js"></script>
   <script src="vendor/couchapp/jquery.couchProfile.js"></script>
   <script src="vendor/couchapp/md5.js"></script>
   <script src="vendor/couchapp/jquery.mustache.js"></script>
+  <script src="vendor/couchapp/jquery.mobile-1.0.1.js"></script>
+  <script type="text/javascript" charset="utf-8">
 
-<!-- templates used by app.js -->
-  <script id="new-message" type="text/x-mustache" charset="utf-8">
-      <div class="avatar">
-        {{#gravatar_url}}<img src="{{gravatar_url}}"/>{{/gravatar_url}}
-        <div class="name">
-          {{name}}
-        </div>
-      </div>
-      <form id="create-message">
-        <label>New message from {{nickname}}: <input type="text" name="message" size=60 value=""></label>
-      </form>
-      <div style="clear:left;"></div>
-  </script>
+      $db = $.couch.db("winehero");
 
-  <script id="recent-messages" type="text/x-mustache" charset="utf-8">
-        <h3>Recent Messages</h3>
-        <ul id="items">
-          {{#items}}
-            <li>
-              <div class="avatar">
-                {{#gravatar_url}}<img src="{{gravatar_url}}" alt="{{name}}"/>{{/gravatar_url}}
-                <div class="name">
-                  {{nickname}}
-                </div>
-              </div>
-              <p>{{message}}</p>
-              <div style="clear:left;"></div>
-            </li>
-          {{/items}}
-        </ul>
-        <p><em>Protip:</em> If you setup continuous replication between this database and a remote one, this list will reflect remote changes in near real-time.</p>
-        <p>This would be a good place to add pagination.</p>
+      function handleDocumentReady()
+      {
+          // request winelist documents...
+          $("#home").bind( "pagebeforeshow", refreshWineLists );
+          refreshWineLists();
+          
+          $("addSubmitButton").live( "click", function( event ) {
+          	event.preventDefault();
+          		var document = {};
+          			document.restaurant = $("input#addRestField").val();
+          			document.title = $("input#addTitleField").val();
+          			document.description = $("textarea#addDescriptionField").val();
+          			document.creation_date = ( new Date() ).getTime();
+          			$db.saveDoc( document, {
+          				success: function() {
+          					$.mobile.changePage( "#home", "slidedown", true, true);
+          				},
+          				error: function( status, error, reason ) {
+          					alert( "Cannot save new document.\n" + status + "," + reason + ", " + error );
+          				}
+          			});
+          			return false;
+          });
+          
+          $("#addWineList").bind( "pagehide", function(){
+          	$("input#addRestField").val("");
+          	$("input#addTitleField").val("");
+          	$("textarea#addDescriptionField").val("");
+          	
+          });
+      }
+
+      function refreshWineLists()
+      {
+          $("#winelists").empty();
+          $db.view("winehero/winelists",
+                  { success: function( data ) {
+                      var i;
+                      var winelist;
+                      var restaurant;
+                      var title;
+                      var description;
+                      var listItem;
+                      var externalPage;
+                      var header;
+                      var wineListLink;
+                      data.rows.reverse();
+                      
+                      for( i in data.rows )
+                      {
+                          winelist = data.rows[i].value;
+                          restaurant = winelist.restaurant;
+                          title = winelist.title;
+                          description = winelist.description;
+                          externalPage = "_show/winelist/" + winelist._id
+                          listItem = "<li class=\"winelist\">" +
+                          				"<a href=\"" + externalPage + "\">" +
+                          					"<h2 class=\"restaurant\">" + restaurant + "<\/h2>" +
+                          				"<\/a>" +
+                                  		"<p class=\"title\">" + title + "<\/p>" +
+                                  		"<p class=\"description\">" + description + "<\/p>"
+                                  		"<p class=\"date\">" + new Date( winelist.creation_date ) + "<\/p>" +
+                                  		"<\/li>";
+                          $("#winelists").append( listItem );
+                      }
+                      $("#winelists").listview( "refresh" );
+                      $("[data-position='fixed']").fixedtoolbar('show');
+                  }
+                  });
+      }
+      
+      $(document).ready( handleDocumentReady );
+
   </script>
-  <script src="script/app.js"></script>
 
 </html>

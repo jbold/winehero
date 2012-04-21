@@ -1,0 +1,38 @@
+<div data-role="page" id="winelistedit" data-nobackbtn="true">
+    <div data-role="header" id="wlistheader">
+        <a id="cancelBackButton" href="#" data-icon="delete">Close</a>
+        <h1 class="wListTitle">{{title}}</h1>
+    </div>
+    <div data-role="wlistcontent" data-theme="c" style="padding:0em;">
+        <form id="wlistform" action="#" method="get" data-identity="{{document}}">
+            <div data-role="fieldcontain">
+                <label for="artist">Restaurant:</label>
+                <input id="restaurantField" name="restaurant" type="text" value="{{restaurant}}" />
+            </div>
+            <div data-role="fieldcontain">
+                <label for="title">Title:</label>
+                <input id="titleField" name="title" type="text" value="{{title}}" />
+            </div>
+            <div data-role="fieldcontain">
+                <label for="description">Description:</label>
+                <textarea id="descriptionField" name="description" cols="40" rows="8">{{description}}</textarea>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="categories">Categories:</label>
+                {{#categories}}<input id="categoriesField" name="categories" type="text" value="{{.}}" />{{/categories}}
+            </div>
+            <div class="ui-body ui-body-b">
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <p id="cancelButton" data-role="button" data-theme="d">Cancel</p>
+                    </div>
+                    <div class="ui-block-b">
+                        <p id="submitButton" data-role="button" data-theme="a">Submit</p>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+    <div data-role="footer" />
+</div>
+{{>scripts}}
