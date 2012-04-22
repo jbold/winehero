@@ -1,4 +1,4 @@
-var WinelistDeleteDialogController = function() {
+var WinelistDeleteController = function() {
 
     function handleDialogViewHide()
     {
@@ -76,6 +76,6 @@ var WinelistDeleteDialogController = function() {
 
 function handleDialogReady()
 {
-    WinelistDeleteDialogController.initialize();
+    WinelistDeleteController.initialize();
 }
 $(handleDialogReady)

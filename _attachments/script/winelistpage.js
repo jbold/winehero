@@ -3,6 +3,7 @@ var WineListPageController = function() {
     function handleView()
     {
     	$("#editListButton").live( "click", handleEdit );
+        $("#deleteButton").live( "click", handleDelete );
         //var docId = $('#wlistcontent').data("identity");
         //var wineListPage = $(document.getElementById("../winelist/" + docId));
         console.log("handleView");
@@ -27,7 +28,7 @@ var WineListPageController = function() {
         // Access document id from data-identity.
         var docId = $("#wlistcontent").data("identity");
         // Change page.
-        $.mobile.changePage( "_show/winelistdelete/" + docId, "slideup", false, false );
+        $.mobile.changePage( "../winelistdelete/" + docId, "slideup", false, false );
         return false;
     }
 
