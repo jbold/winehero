@@ -20,6 +20,17 @@ var WineListPageController = function() {
     	
     }
 
+    function handleDelete( event )
+    {
+        // Prevent default link event.
+        event.preventDefault();
+        // Access document id from data-identity.
+        var docId = $("#wlistcontent").data("identity");
+        // Change page.
+        $.mobile.changePage( "_show/winelistdelete/" + docId, "slideup", false, false );
+        return false;
+    }
+
     return {
        initialize : function() 
        {
