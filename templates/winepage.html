@@ -1,0 +1,20 @@
+<div data-role="page" id="winepage" data-position="inline" data-back="true" data-dom-cache="false">
+    <div data-role="header" id="winePageHeader">
+        <h1 class="WinePageTitle">{{title}}</h1>
+        <a href="#home" data-icon="grid" class="ui-btn-right">Home</a>
+    </div>
+    <div data-role="content" id="winePageContent" data-identity="{{document}}">
+        <h2 class="producer">{{producer}}</h2>
+        <p class="vintage">{{vintage}}</p>
+        <p class="varietal">{{varietal}}</p>
+        <p class="category">{{category}}</p>
+        <div data-role="navbar">
+			<ul class="ui-grid-a">
+				<li><a href="#" id="deleteButton" data-icon="minus">Delete</a></li>
+				<li><a href="#" id="editButton" data-icon="gear" data-theme="b">Edit</a></li>
+			</ul>
+		</div>
+			<div data-role="footer" />      
+    </div>
+</div>
+{{>scripts}}

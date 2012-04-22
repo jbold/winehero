@@ -13,9 +13,6 @@ var WineListPageController = function() {
     
     function handleEdit ( event )
     {
-    	//Prevent default link event.
-    	//event.preventDefault();
-    	//access document id from data-identity.
     	
     	$("#editListButton").die( "click" );
     	var docId = $('#wlistcontent').data("identity");
@@ -25,35 +22,14 @@ var WineListPageController = function() {
     	//return false;
     	
     }
-    
-    //function handleAddNewWine ( event )
-    //{    	
-    //	$("#addWineButton").die( "click" );
-    	//var parentList_docId = $('#wlistcontent').data("identity");
-    //	$.mobile.changePage( "../addwine/", "slide", false, true );
-    //	console.log("handleAddNewWine");
-    //}
-
-    //function handlePageViewHide()
-    //{
-      //  $("#editButton").die( "click", handleEdit );
-        
-        //var docId = $("#wlistcontent").data("identity");
-        //var wineListPageCache =  $(document.getElementById("../winelist/" + docId));
-        //wineListPageCache.unbind( "pagehide" );
-        //wineListPageCache.empty();
-        //wineListPageCache.remove();
-        //console.log("handlePageViewHide");
-    //}
 
     return {
-       initialize : function() {
-         // $("div[data-role='page']").live( "pageshow", function() {
-          //      $("div[data-role='page']").die( "pageshow" );
+       initialize : function() 
+       {
+        
                handleView();
-          //  });
-      }
-   };
+       }
+    };
     
 }();
 

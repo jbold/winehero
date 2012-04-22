@@ -1,23 +1,47 @@
-  // function addWineListId(wineListId)
-	//  {
-	  	
-	  	//document.getElementById('originalWineId').value = wineListId;
-	  	
-	  	// GET CATEGORIES BASED ON WINELIST ID
-	//  	$("#select-choice-3").empty();
-	//  	console.log("awesomesauce");
-	 // 	return false;
-         // $db.view("winehero/categories_by_winelist_id?key="+wineListId,
-                //  { success: function( data ) {
-                  //		console.log(addWineListId);
-                  	//	return false;
-                  		//var i;
-                  		//var listItem;
-                  		//var categories[] = data.rows[i].value.categories[];
-                  		//console.log(categories);
-                  		//return false;
-                  		//for (i == 0; i<=categories.length; i++)
-                  		//	return listItem == "<option value=\"categories[i]\">"+categories[i]+"<\/option>\n";
-                  
-                 // });
-	  }
+var AddWinePageController = function () {
+
+		$("#addSubmitButton").live( "click", function( event ) {
+          	event.preventDefault();
+          		var document = {};
+          			document.restaurant = $("input#wineListRestaurant").val();
+          			document.title = $("input#wineListTitle").val();
+          			document.wineListId = $("input#wineListId").val();
+          			document.vintage = $("input#vintageInputId").val();
+          			document.varietal = $("input#varietalInputId").val();
+          			document.producer = $("input#producerInputId").val();
+          			document.category = $("input#select-choice-3")
+          			//var categoriesHolder = new Array();
+          			//for(cat=0;cat<categoryCount;cat++)
+          			//{
+          			//	if ($("input#addCategory"+cat).val())
+          			//	{
+          			//		categoriesHolder[cat] = $("input#addCategory"+cat).val();
+          			//	}
+          			//}
+          			//document.categories = categoriesHolder;
+          			document.creation_date = ( new Date() ).getTime();
+          			document.kind = "wine";
+          			$db.saveDoc( document, {
+          				success: function(data) {
+          					$.mobile.changePage( "_show/winepage/" + data.id, "slidedown", true, true);
+          				},
+          				error: function( status, error, reason ) {
+          					alert( "Cannot save new document.\n" + status + "," + reason + ", " + error );
+          				}
+          			});
+          			
+          return {
+       			initialize : function() 
+       			{
+                	handleView();
+      			}
+   			};
+          			
+});
+
+function handlePageViewReady()
+{
+    AddWinePageController.initialize();
+};
+
+$(handlePageViewReady);

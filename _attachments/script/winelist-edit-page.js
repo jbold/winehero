@@ -3,25 +3,14 @@ var WineListEditPageController = function() {
 	var editableWineList;
 
     function handleEditPageViewHide()
-    {
-        
+    {    
         editableWineList = null;
-        
-        //var docId = $("#wlistform").data("identity");
-        //var pageCache =  $(document.getElementById("_show/winelistedit/" + docId));
-       // pageCache.unbind( "pagehide" );
-       // pageCache.empty();
-       // pageCache.remove();
     }
 
     function handleEditView()
     {
-        // Watch for bound hide of page to clear from cache.
-        //var docId = $("#wlistform").data("identity");
-        //var wineListPage = $(document.getElementById("_show/winelistedit/" + docId));
-        //wineListPage.bind( "pagehide", handleEditPageViewHide );
         
-        storeUnitedDocument();
+       storeUnitedDocument();
     }
     
     function navigateToWineListPage( docId )
@@ -112,11 +101,11 @@ var WineListEditPageController = function() {
         			}
         		});
         	});
-            $("div[data-role='page']").live( "pageshow", function() {
-              $("div[data-role='page']").die( "pageshow" );
+            //$("div[data-role='page']").live( "pageshow", function() {
+             // $("div[data-role='page']").die( "pageshow" );
                handleEditView();
                 
-            });
+            //});
         }
     };
 }();
