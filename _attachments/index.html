@@ -15,7 +15,7 @@
       <div data-role="footer" data-position="fixed">
       	<div data-role="navbar">
       		<ul class="ui-grid-a">
-      			<li style="width:100%;"><a href="#addWineList" data-transition="slideup" data-icon="plus">Add WList</a></li>
+      			<li style="width:100%;"><a href="#addWineList" data-transition="slideup" data-icon="plus" onClick="resetCats()">Add WList</a></li>
       		</ul>
       	</div>
       </div>
@@ -44,10 +44,15 @@
               <div data-role="fieldcontain">
                  <label for="categories">Categories:</label>
 			     <div id="categories">
+				<!-- Holder for category inputs. -->
+			     </div> 
+			  </div>
+              <div data-role="fieldcontain">
+			     <div id="addCategories">
 			     <input type="button" value="Add Category" onClick="addInput('categories');" />
 			     </div> 
 			  </div>
-			  
+	      </div>
               <div class="ui-body ui-body-b">
                   <fieldset class="ui-grid-a">
                       <div class="ui-block-a">
@@ -77,6 +82,7 @@
 
       $db = $.couch.db("winehero");
 	  var categoryCount = 0;
+	  var aCategoryCount = 0;
 	  function addInput(divName){
 		var newdiv = document.createElement('div');
 		newdiv.setAttribute("id","categoryDivHolder"+categoryCount);
@@ -86,18 +92,41 @@
 			     //<input type=\"button\" value=\"Add Category\" onClick=\"addInput('categories');\" \/>
 	    document.getElementById(divName).appendChild(newdiv);
 	    categoryCount++;
+	    aCategoryCount++;
 	    //console.log("addInputFired");
 	  }
 	  function categoryRemove(removeCat)
 	  {
 	  	//console.log(document.getElementById('categoryDivHolder'+removeCat));
 	  	//.removeChild('addCategory'+removeCat);
+		if (aCategoryCount == 1)
+		{
+			alert("You must have at least one category.");
+			return false;
+		}
 	  	element = document.getElementById("categoryDivHolder"+removeCat);
 		element.parentNode.removeChild(element);
-	  	return false;
+	  	aCategoryCount--;
+		return false;
 	  	categoryCount--;	
 	  }
-      function handleDocumentReady()
+   	  function resetCats()
+	  {
+		if (categoryCount == 0)
+		{
+			addInput('categories');
+		} else if (aCategoryCount > 1)
+		{
+			var i;
+			for (i = 0; i < categoryCount - 1; i++)
+			{
+				categoryRemove(i);
+			}
+		}
+	  }
+
+
+	function handleDocumentReady()
       {
           // request winelist documents...
           $("#home").bind( "pagebeforeshow", refreshWineLists );
@@ -107,27 +136,32 @@
           	event.preventDefault();
           		var document = {};
           			document.restaurant = $("input#addRestField").val();
-          			document.title = $("input#addTitleField").val();
+				document.title = $("input#addTitleField").val();
           			document.description = $("textarea#addDescriptionField").val();
           			var categoriesHolder = new Array();
+				var trueCatCount = 0;
           			for(cat=0;cat<categoryCount;cat++)
           			{
           				if ($("input#addCategory"+cat).val())
           				{
-          					categoriesHolder[cat] = $("input#addCategory"+cat).val();
+          					categoriesHolder[trueCatCount] = $("input#addCategory"+cat).val();
+						trueCatCount++;
           				}
           			}
           			document.categories = categoriesHolder;
           			document.creation_date = ( new Date() ).getTime();
           			document.kind = "winelist";
-          			$db.saveDoc( document, {
-          				success: function(data) {
-          					$.mobile.changePage( "_show/winelist/" + data.id, "slidedown", true, true);
-          				},
-          				error: function( status, error, reason ) {
-          					alert( "Cannot save new document.\n" + status + "," + reason + ", " + error );
-          				}
-          			});
+	          		if (validate(document))
+				{	
+					$db.saveDoc( document, {
+        	  				success: function(data) {
+          						$.mobile.changePage( "_show/winelist/" + data.id, "slidedown", true, true);
+          					},
+          					error: function( status, error, reason ) {
+          						alert( "Cannot save new document.\n" + status + "," + reason + ", " + error );
+          					}
+          				});
+				}
           			return false;
           });
           
@@ -138,6 +172,16 @@
           	
           });
       }
+
+	function validate(document)
+	{
+		// if (document.resturant == "" || document.resturant == null)
+		// {
+		// 	alert("Resturant name can not be blank.");
+		//	return false;
+		// }
+		return true;
+	}
 
       function refreshWineLists()
       {
@@ -179,12 +223,7 @@
                   });
       }
 
-	 
-
       $(document).ready( handleDocumentReady );
-      
-      
-
 
   </script>
 
