@@ -3,11 +3,8 @@ var WineListPageController = function() {
     function handleView()
     {
     	$("#editListButton").live( "click", handleEdit );
-    	$("#addWineButton").live( "click", handleAddNewWine );
-        // Watch for bound hide of page to clear from cache.
-        var docId = $('#wlistcontent').data("identity");
-        var wineListPage = $(document.getElementById("../winelist/" + docId));
-        //wineListPage.bind( "pagehide", handlePageViewHide );
+        //var docId = $('#wlistcontent').data("identity");
+        //var wineListPage = $(document.getElementById("../winelist/" + docId));
         console.log("handleView");
     }
     

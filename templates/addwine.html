@@ -24,11 +24,12 @@
               	</div>
               
   				 	 	<div data-role="fieldcontain">
-							<label for="select-choice-3" class="select">Category:</label>
-							<select name="select-choice-3" id="select-choice-3">
-								 {{#categories}}<option value="category">{{.}}</option>{{/categories}}
+							<label for="category" class="select">Category:</label>
+                            <select name="catDropDownName" id="catDropDownId">
+								 {{#categories}}<option selected="selected">{{.}}</option>{{/categories}}
 							</select>
-			     		</div> 
+			     		</div>
+
 			  
           	</form>
           
@@ -38,11 +39,12 @@
                           <a href="../winelist/{{document}}" id="addCancelButton" data-role="button" data-theme="d">Cancel</a>
                       </div>
                       <div class="ui-block-b">
-                          <a href="#" id="addSubmitButton" data-role="button" data-theme="a">Submit</a>
+                          <a href="#" id="addWineSubmitButton" data-role="button" data-theme="a">Submit</a>
                       </div>
                   </fieldset>
-              </div>
-              
+
+           </div>
         </div>
-    </div>
+    <div data-role="footer" data-position="fixed" />
+</div>
 {{>scripts}}

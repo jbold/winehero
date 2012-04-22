@@ -1,4 +1,4 @@
-var WineListEditPageController = function() {
+var WineListEditController = function() {
 		
 	var editableWineList;
 
@@ -112,6 +112,6 @@ var WineListEditPageController = function() {
 
 function handleEditPageReady()
 {
-    WineListEditPageController.initialize();
+    WineListEditController.initialize();
 }
 $( handleEditPageReady );
