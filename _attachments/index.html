@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="style/jquery.mobile-1.0.1.css" type="text/css">
   </head>
   <body>
+<!--The home page of wine lists-->
   <div id="home" data-role="page">
       <div data-role="header" data-position="fixed"><h2>Wine Hero</h2></div>
       <div data-role="content">
@@ -19,6 +20,8 @@
       	</div>
       </div>
   </div>
+  
+<!--The page where you add a new wine list-->
   <div id="addWineList" data-role="page">
         <div data-role="header"><h1>New WList</h1></div>
         <div data-role="content">
@@ -40,8 +43,6 @@
               
               <div data-role="fieldcontain">
                  <label for="categories">Categories:</label>
-  				  	 <!--<input id="addCategory" name="categories" type="text" />
-                 <input type="button" value="Remove Category" onClick="categoryRemove("");" />/-->
 			     <div id="categories">
 			     <input type="button" value="Add Category" onClick="addInput('categories');" />
 			     </div> 
@@ -60,10 +61,8 @@
           </form>
         </div>
     </div>
+    </div>
   </body>
-  <!--
-  <script src="vendor/couchapp/loader.js"></script>
--->
   <script src="/_utils/script/sha1.js"></script>
   <script src="/_utils/script/json2.js"></script>
   <script src="/_utils/script/jquery.js"></script>
@@ -110,9 +109,6 @@
           			document.restaurant = $("input#addRestField").val();
           			document.title = $("input#addTitleField").val();
           			document.description = $("textarea#addDescriptionField").val();
-          			// document.categories = ["test", "test2", "test3"];
-          			//document.categories = $('*["input#categoryList"]').val();
-          			//$("input#categories").appendTo(document.categories);
           			var categoriesHolder = new Array();
           			for(cat=0;cat<categoryCount;cat++)
           			{
@@ -122,13 +118,6 @@
           				}
           			}
           			document.categories = categoriesHolder;
-          			//document.categories = $("input#categories[]").val();
-          			//$.each($("input#addCategory"), function(index, value) {
-    				//	$(this).val();
-					//});
-          			//var catArray = 
-          			//console.log(categoriesHolder);
-          			//return false;
           			document.creation_date = ( new Date() ).getTime();
           			document.kind = "winelist";
           			$db.saveDoc( document, {
@@ -190,7 +179,7 @@
                   });
       }
 
-
+	 
 
       $(document).ready( handleDocumentReady );
       

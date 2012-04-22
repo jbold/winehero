@@ -1,0 +1,43 @@
+<div id="addWinePage" data-role="page">
+    	<input type="hidden" name="listId" id="originalWineId" />
+    	<div data-role="header"><h1>Add A Wine</h1></div>
+        <div data-role="content">
+            <form id="wineListAddForm" action="#" method="get">
+                <div data-role="fieldcontain">
+                  <label for="vintage">Vintage:</label>
+                     <input id="vintageInputId" name="vintageName" type="text" />
+              	</div>
+              	
+              	<div data-role="fieldcontain">
+                  <label for="varietal">Varietal:</label>
+                     <input id="varietalInputId" name="varietalName" type="text" />
+              	</div>
+              	
+              	<div data-role="fieldcontain">
+                  <label for="producer">Producer:</label>
+                  <input id="producerInputId" name="producerName" type="text" />
+              	</div>
+              
+  				 	 	<div data-role="fieldcontain">
+							<label for="select-choice-3" class="select">Category:</label>
+							<select name="select-choice-3" id="select-choice-3">
+								 {{#categories}}<option value="category">{{.}}</option>{{/categories}}
+							</select>
+			     		</div> 
+			  
+          	</form>
+          
+           <div class="ui-body ui-body-b">
+                  <fieldset class="ui-grid-a">
+                      <div class="ui-block-a">
+                          <a href="#home" id="addCancelButton" data-role="button" data-theme="d">Cancel</a>
+                      </div>
+                      <div class="ui-block-b">
+                          <a href="#" id="addSubmitButton" data-role="button" data-theme="a">Submit</a>
+                      </div>
+                  </fieldset>
+              </div>
+              
+        </div>
+    </div>
+{{>scripts}}
